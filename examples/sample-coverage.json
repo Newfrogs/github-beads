@@ -1,0 +1,21 @@
+{
+  "requirements": [
+    {
+      "id": "REQ-PARSE-01",
+      "disposition": "included",
+      "bead_ids": ["demo-contract", "demo-parser"]
+    },
+    {
+      "id": "REQ-EXPORT-02",
+      "disposition": "deferred",
+      "bead_ids": ["demo-export"],
+      "reason": "The export contract must be approved before implementation."
+    },
+    {
+      "id": "REQ-HOST-03",
+      "disposition": "out_of_scope",
+      "bead_ids": [],
+      "reason": "Hosted deployment is excluded from this example."
+    }
+  ]
+}
