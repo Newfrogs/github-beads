@@ -1,4 +1,4 @@
 interface:
   display_name: "GitHub Beads"
-  short_description: "Turn repository plans into verified Beads tasks"
-  default_prompt: "Use $github-beads to convert this repository plan into self-contained Beads tasks with dependencies and a coverage audit."
+  short_description: "Write plans, create Beads, and implement verified code"
+  default_prompt: "Use $github-beads to write a full Markdown plan for this repository change, create dependency-aware Beads with acceptance criteria, then implement and verify the included scope."

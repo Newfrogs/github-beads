@@ -8,6 +8,8 @@ New Flywheel workspaces should normally use Beads Rust, whose operational store 
 
 For a repository already using `bd`, retain it. Use installed help and its official documentation for creation, descriptions, hierarchy, dependencies, claims, and Dolt handoff. This package's `br` commands are not a migration recipe. The bundled auditor may inspect a compatible exported JSONL file, but that file is not a Dolt backup.
 
+Check database-location overrides such as `BEADS_DB` and explicit `--db` arguments, as well as project configuration. Confirm the resolved store and export belong to the intended repository before any mutation; a correct working directory alone does not guarantee this. If an ambient override redirects the tool elsewhere, use the installed backend's supported repository-local location option or resolve the configuration conflict. Do not initialize or claim work in the redirected store, bypass its lock, or change global configuration merely to make the command succeed.
+
 ## Inspect before mutation
 
 At the repository root:

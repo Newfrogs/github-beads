@@ -2,7 +2,17 @@
 
 Prepared 12 October 2026 for a reusable skill across GitHub repositories.
 
-Create a portable `github-beads` skill that translates requirements into executable Beads records, checks coverage and dependency integrity, and prepares repository changes for review. Use Beads Rust (`br`) for new Flywheel-style workspaces, respect an existing original Beads (`bd`) setup, and make remote issue mirroring an explicit option. The first version consists of instructions, focused references, and a read-only Python auditor.
+Create a portable `github-beads` skill that writes full Markdown implementation plans, translates their requirements into executable Beads records, checks coverage and dependency integrity, implements and verifies the included code, and prepares repository changes for review. Use Beads Rust (`br`) for new Flywheel-style workspaces, respect an existing original Beads (`bd`) setup, and make remote issue mirroring an explicit option. Version 0.1 focused on plan-to-Beads conversion; version 0.2 extends the shared Claude Code and Codex workflow through planning, implementation, and resume.
+
+## Version 0.2 workflow extension
+
+The canonical skill now routes four intents: planning only, Beads only, a complete planning-to-code workflow, and implementation or resume of existing work. A full workflow request authorizes its ordinary local stages without another approval checkpoint after the plan or graph is ready. Narrower requests retain their stopping point. Publication, deployment, and destructive actions remain governed by the user's request and client permissions.
+
+The new Markdown planning reference and bundled template cover the outcome, boundaries, repository evidence, stable requirement identifiers, observable acceptance, architecture and design, important interfaces and failure cases, implementation sequence, verification, risks, and decision provenance. Plans follow repository conventions or live at `plans/<feature-slug>.md`. Beads hold execution status and evidence; a coverage map links actual IDs back to the saved source. Planning and code use the same repository by default.
+
+The implementation reference specifies native readiness and claims, code changes tied to task acceptance, appropriate verification, recorded evidence before closure, and reconciliation of findings into the plan and affected tasks. A resume receipt preserves paths, actual IDs, checks, blockers, and publication state. Resuming requires fresh tracker and code inspection rather than rebuilding the graph or treating an old receipt as authoritative.
+
+Both clients load the same portable package. Claude's plugin wrapper is versioned 0.2.0, and Codex's interface prompt requests the complete workflow. There is no separate client-specific implementation logic. Missing tracker executables leave the Beads stage explicitly incomplete; a structural audit or a written plan cannot stand in for delivered behavior.
 
 ## Research findings
 
@@ -174,7 +184,7 @@ Acceptance:
 - Readiness matches intended sequencing.
 - Unicode, newlines, quotes, and shell metacharacters remain literal.
 
-This phase remains a live integration gate; the automated tests use exported-data fixtures rather than a live `br` executable.
+Version 0.2 includes a scoped live pilot with checksum-verified `br v0.7.4` on Windows. It exercises a saved Markdown plan, real records and descriptions, a prerequisite edge and native readiness, claims, implementation, acceptance evidence, closure, export, and the auditor. Broader cases remain: epic policy, deferral and exclusions in a live store, repeated conversion and changed requirements, and concurrent recovery. The automated CI suite still uses exported-data fixtures rather than installing a tracker.
 
 ### Phase 4 Verify existing backend compatibility
 
@@ -204,7 +214,16 @@ Acceptance: changes have an identifiable behavior benefit and existing invariant
 
 The package passes the bundled skill validator. All 15 automated auditor tests pass. They cover valid DAGs, duplicate IDs, missing endpoints, exact cycle components, blocking categories, nonblocking relationships, closed cycles, typed-edge identity, external and custom references, coverage gaps, tombstones, missing manifests, malformed fields, Unicode, CLI exit codes, and preservation of input bytes. A 3,000-record chain exercises deep traversal.
 
-These checks validate the helper and package structure. They do not exercise live `br`, `bd`, or `bv`, nor do they exercise GitHub issue mirroring. The live tracker pilots and actual backlog review gates remain as listed above. The public repository includes runnable examples and a GitHub Actions workflow for testing the auditor on Windows and Linux.
+The version 0.2 workflow was also exercised in disposable projects:
+
+- **Planning-only scope probe:** saved a 76-line Markdown plan with five requirements; original code bytes stayed unchanged, and no tracker or implementation artifacts were created.
+- **Full workflow pilot:** an agent loaded the canonical skill and saved a plan with eight requirements, created actual `br` tasks `e2e-mjq` and `e2e-epu` with one prerequisite edge, implemented an ASCII slug function and CLI, and recorded acceptance evidence before closing both tasks. All 13 project tests passed, including the two pre-existing tests. The requested CLI returned `hello-world` with exit 0; an empty-slug input returned exit 2 with a clear stderr message. The existing function and test file were preserved.
+- **Native tracker checks:** the ready and blocked sets were empty after completion, cycle detection found no cycles, and native diagnostics reported a healthy store. The full export's structural and eight-requirement mapping audit passed. These are actual tracker operations, not fabricated JSONL records.
+- **Package checks:** Codex's skill validator and Claude Code's strict plugin and marketplace validators passed. The same ten-file canonical skill package supplies both clients.
+
+The Windows pilot encountered a path-resolution failure in the restricted environment before initialization; no database override variables were set. An explicit pilot-local database path and normal permission escalation kept subsequent operations in the disposable repository. The backend guidance now requires confirming the resolved database and export before mutation. This does not establish an upstream root cause for that initial failure.
+
+These checks validate the helper, package, planning scope, and one real `br` planning-to-code workflow. They do not exercise live `bd` or `bv`, GitHub issue mirroring, concurrent claim races, deployment, or complete model-driven sessions in both external clients. Client discovery and installation are separate packaging checks. The broader pilots and actual backlog review gates remain as listed above. The public repository includes runnable auditor examples and GitHub Actions checks on Windows and Linux.
 
 ## Principal decisions and risks
 
@@ -221,4 +240,4 @@ These checks validate the helper and package structure. They do not exercise liv
 | Excessive fragmentation or review | Size by outcomes and stop after material defects are resolved |
 | Client-specific packaging | Keep portable instructions separate from UI metadata |
 
-The main design choice is to make reliable plan-to-record conversion the reusable core. GitHub provides sharing and review, while optional tooling can enrich the workflow when a repository needs it.
+The main design choice is to preserve a traceable path from written intent through actual records to verified behavior. GitHub provides sharing and review, while optional tooling can enrich the workflow when a repository needs it.

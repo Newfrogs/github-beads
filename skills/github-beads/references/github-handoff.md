@@ -11,7 +11,7 @@ git diff -- .beads/issues.jsonl
 git status --short --ignored -- .beads/
 ```
 
-Stage the export and only appropriate configuration or planning artifacts. Preserve the generated ignore rules and verify that databases, WAL files, locks, recovery data, and machine-specific metadata are excluded. Inspect the staged diff before committing. `br` does not commit, pull, or push automatically, though explicitly requested reporting commands can inspect Git. [VCS integration](https://github.com/Dicklesworthstone/beads_rust/blob/main/docs/VCS_INTEGRATION.md).
+Stage the export, relevant plan and coverage or execution artifacts, and the code, tests, and documentation actually changed within scope. Preserve the generated ignore rules and verify that databases, WAL files, locks, recovery data, and machine-specific metadata are excluded. Inspect the staged diff before committing. `br` does not commit, pull, or push automatically, though explicitly requested reporting commands can inspect Git. [VCS integration](https://github.com/Dicklesworthstone/beads_rust/blob/main/docs/VCS_INTEGRATION.md).
 
 Follow the repository's branch and review conventions. Include bead IDs in relevant commit or PR text. A PR should identify the source plan, scope, coverage dispositions, actual tracker counts, validation, ready work, and known open decisions. If GitHub publication was requested, verify the remote and create a reviewable commit or PR within that authorization. Attach a created PR to the current host task when its artifact tool is available.
 

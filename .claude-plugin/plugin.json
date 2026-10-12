@@ -1,7 +1,7 @@
 {
   "name": "github-beads",
-  "version": "0.1.0",
-  "description": "Create, refine, and audit Beads tasks from repository plans and GitHub issues.",
+  "version": "0.2.0",
+  "description": "Write Markdown plans, create dependency-aware Beads, and implement and verify repository changes.",
   "author": {
     "name": "Newfrogs",
     "url": "https://github.com/Newfrogs"

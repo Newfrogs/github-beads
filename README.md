@@ -1,8 +1,8 @@
 # GitHub Beads
 
-A reusable agent skill that turns repository plans into Beads tasks with enough context to implement and verify them. It includes a Python auditor for dependency and requirement-mapping checks.
+A reusable skill for Claude Code and Codex that writes a full Markdown plan, turns it into dependency-aware Beads tasks, then implements and verifies the code in your project repository. It includes a plan template, execution and resume guidance, and a Python auditor for dependency and requirement-mapping checks.
 
-The skill prefers Beads Rust (`br`) for new workspaces and preserves an existing original Beads (`bd`) backend. It guides plan conversion, backlog refinement, reconciliation, and GitHub review. GitHub issue mirroring is optional.
+The skill prefers Beads Rust (`br`) for new workspaces and preserves an existing original Beads (`bd`) backend. You can request the full workflow or stop at planning or Beads creation. GitHub publication follows your request; issue mirroring is optional.
 
 ## Install in Codex
 
@@ -47,7 +47,7 @@ claude plugin install github-beads@github-beads --scope user
 Start Claude Code in the repository you want to work on, then invoke:
 
 ```text
-/github-beads:github-beads Convert plans/feature.md into Beads tasks with dependencies, acceptance criteria, verification, and a coverage audit.
+/github-beads:github-beads Write a full Markdown plan for FEATURE, turn it into Beads, then implement and verify the code in this repository.
 ```
 
 The [Claude installation guide](docs/claude-installation.md) also covers Windows and macOS/Linux folder installation, personal and project scopes, verification, updates, and removal. A folder installation uses `/github-beads`; the plugin installation uses `/github-beads:github-beads`. See [Anthropic's plugin documentation](https://code.claude.com/docs/en/discover-plugins) for supported clients.
@@ -57,6 +57,17 @@ The [Claude installation guide](docs/claude-installation.md) also covers Windows
 Copy the same `skills/github-beads` folder into the target repository's `.agents/skills/github-beads` directory. Codex discovers repository skills there. GitHub Copilot also supports `.github/skills`, `.claude/skills`, and `.agents/skills`; see [GitHub's documentation](https://docs.github.com/en/copilot/concepts/agents/about-agent-skills) for supported clients.
 
 `SKILL.md`, the references, and the Python helper form the portable package. `agents/openai.yaml` supplies Codex interface metadata.
+
+## Update an existing installation
+
+For Claude's plugin installation:
+
+```text
+claude plugin marketplace update github-beads
+claude plugin update github-beads@github-beads
+```
+
+For a copied Codex or Claude skill, pull the latest source, compare it with your installed `github-beads` folder, preserve any local edits, and refresh the entire package including its references and assets. The installer and copy examples above intentionally refuse an existing destination. Start a new client session after updating.
 
 ## Prerequisites
 
@@ -71,7 +82,38 @@ Installing the skill does not install tracker binaries. Follow the [br](https://
 
 ## Use the skill
 
-In Codex:
+For the full workflow in Codex:
+
+```text
+Use $github-beads to write a full Markdown plan for FEATURE in this
+repository, create dependency-aware Beads from it, then implement the
+included scope and verify its acceptance criteria. Save the plan,
+coverage map, and execution evidence. Continue through all three stages.
+```
+
+In Claude Code with the plugin:
+
+```text
+/github-beads:github-beads Write a full Markdown plan for FEATURE in this repository, create Beads from it, then implement and verify the included scope. Save the plan, coverage map, and execution evidence. Continue through all three stages.
+```
+
+Replace `FEATURE` with the behavior you want and any constraints. A folder-installed Claude skill uses `/github-beads` instead.
+
+| Requested mode | Result |
+| --- | --- |
+| Plan only | A saved Markdown plan with requirements, design, implementation sequence, verification, and open decisions |
+| Beads only | Actual tracker records, dependencies, and a coverage audit of the supplied plan |
+| Full workflow | Plan, Beads, implemented code, and acceptance evidence |
+| Implement or resume | Continued work from the saved plan and actual tracker state |
+
+For planning only:
+
+```text
+Use $github-beads to write a full Markdown plan for FEATURE. Planning only:
+save the plan, but do not create Beads or change implementation code.
+```
+
+For an existing plan:
 
 ```text
 Use $github-beads to convert plans/feature.md into real Beads tasks in this
@@ -85,7 +127,25 @@ Reuse completed work where it still satisfies the requirements and report
 the actual created, updated, and reused bead IDs.
 ```
 
-The agent reads repository instructions, selects the existing backend, checks for duplicates, creates or updates real records, audits the graph and source coverage, and prepares a reviewable handoff. Commit, PR, implementation, and issue-publication scope follow your request.
+To resume coding:
+
+```text
+Use $github-beads to resume implementation from plans/feature.md and its
+existing Beads. Inspect current code and tracker state, preserve completed
+work, implement the remaining included requirements, and verify them.
+```
+
+Use the same instructions after `/github-beads:github-beads` in Claude Code. The invocation prefix is the client-specific part; the workflow and supporting files are shared.
+
+## Where the plan, tasks, and code live
+
+The agent follows your project's conventions. Otherwise, it writes the plan to `plans/<feature-slug>.md`, keeps a requirement coverage map and a concise execution receipt alongside it, creates actual tasks in the selected Beads store, and edits the project's existing code and tests. Planning and coding use the same repository by default.
+
+The [plan template](skills/github-beads/assets/plan-template.md) covers the goal, scope, evidence, stable requirement IDs, observable acceptance criteria, architecture, design, failure handling, implementation sequence, verification, risks, and decisions. The [planning guide](skills/github-beads/references/markdown-planning.md) explains how to adapt it to the work.
+
+The agent checks for existing tasks before creating records, audits source coverage and dependencies, claims eligible work through the native tracker, implements it, and records acceptance evidence before closing tasks. The [implementation and resume guide](skills/github-beads/references/implementation-and-resume.md) describes that loop and recovery after interruptions.
+
+A full workflow request continues through the local stages without another planning approval. Material missing decisions and host permissions still apply; independent work continues when possible. Commits, pushes, PRs, deployment, and issue publication follow your request. A passing structural audit alone does not establish that code is implemented or correct.
 
 ## Run the auditor on its own
 
@@ -103,7 +163,7 @@ The auditor prints a JSON receipt, with input hashes, errors, warnings, and cove
 
 It checks duplicate IDs, basic content, typed-edge integrity, missing local endpoints, structural cycles, and coverage references. Duplicate titles, external references, and custom edge types are flagged for review. Without a coverage map, coverage is explicitly `not_checked`.
 
-These checks do not prove semantic completeness, implementation, or backend-specific readiness. Live `br`, `bd`, and `bv` integration has not yet been validated for this package. See the [coverage schema and audit limits](skills/github-beads/references/conversion-and-quality.md).
+These checks do not prove semantic completeness, implementation, or backend-specific readiness. See the [coverage schema and audit limits](skills/github-beads/references/conversion-and-quality.md) and [validation results](docs/research-and-implementation-plan.md#validation-results-and-remaining-gates) for tested behavior and remaining integration gates.
 
 ## Contribute
 

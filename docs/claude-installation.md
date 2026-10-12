@@ -17,10 +17,10 @@ The first command registers this repository's marketplace. The second installs t
 Start a new Claude Code session in the repository you want to work on. At the Claude prompt, invoke the skill with its plugin namespace:
 
 ```text
-/github-beads:github-beads Convert plans/feature.md into real Beads tasks. Preserve requirements and rationale, add dependencies, include acceptance criteria and verification, and audit coverage.
+/github-beads:github-beads Write a full Markdown plan for FEATURE in this repository, create Beads from it, then implement and verify the included scope. Save the plan, coverage map, and execution evidence. Continue through all three stages.
 ```
 
-For an existing backlog:
+Replace `FEATURE` with your requested behavior and constraints. For planning only, append `Planning only; do not create Beads or implement code.` To convert an existing plan without coding, ask `Convert plans/feature.md to Beads only; audit coverage.` For an existing backlog:
 
 ```text
 /github-beads:github-beads Reconcile the revised plan with the existing backlog. Reuse completed work where appropriate and report actual created, updated, and reused bead IDs.
@@ -73,7 +73,7 @@ For a project skill, copy that entire folder to `<target-repository>/.claude/ski
 Start Claude Code in the target repository and invoke a folder-installed skill without a plugin prefix:
 
 ```text
-/github-beads Convert plans/feature.md into Beads tasks with dependencies, acceptance criteria, verification, and a coverage audit.
+/github-beads Write a full Markdown plan for FEATURE, create Beads from it, then implement and verify the included scope.
 ```
 
 Personal skills live at `~/.claude/skills`; project skills live at `.claude/skills` in the target repository. These locations and the `/skill-name` syntax are documented in [Anthropic's skill guide](https://code.claude.com/docs/en/skills).
@@ -90,7 +90,7 @@ The auditor can also be verified from the cloned repository:
 python skills/github-beads/scripts/audit_beads.py examples/sample-export.jsonl --coverage examples/sample-coverage.json
 ```
 
-Use `python3` if that is your Python 3 command. The synthetic example should produce `"ok": true` and exit successfully. Live `br`, `bd`, and `bv` integration remains a separate validation gate described in the README.
+Use `python3` if that is your Python 3 command. The synthetic example should produce `"ok": true` and exit successfully. The [validation report](research-and-implementation-plan.md#validation-results-and-remaining-gates) distinguishes the automated checks, workflow pilot, and remaining integration gates.
 
 ## Update or remove
 

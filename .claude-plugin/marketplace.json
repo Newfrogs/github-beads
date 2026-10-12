@@ -8,7 +8,7 @@
     {
       "name": "github-beads",
       "source": "./",
-      "description": "Create, refine, and audit dependency-aware Beads tasks in GitHub repositories."
+      "description": "Write full Markdown plans, turn them into Beads, and implement verified code in GitHub repositories."
     }
   ]
 }
