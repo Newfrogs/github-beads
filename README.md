@@ -48,6 +48,8 @@ Copy the same `skills/github-beads` folder into the target repository's `.agents
 - Python 3.10 or newer to run the auditor. It has no third-party runtime dependencies.
 - Git for repository collaboration. `bv` is optional; GitHub CLI or a connected GitHub interface is needed only for remote publication.
 
+Use `python3` instead of `python` in the commands below if that is how your system names Python 3.
+
 Installing the skill does not install tracker binaries. Follow the [br](https://github.com/Dicklesworthstone/beads_rust#installation), [bd](https://github.com/gastownhall/beads), and optional [bv](https://github.com/Dicklesworthstone/beads_viewer#installation) instructions. Check the installed version's help before using command examples. Never run `br` and `bd` against the same store.
 
 ## Use the skill
