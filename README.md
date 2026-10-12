@@ -1,6 +1,6 @@
 # GitHub Beads
 
-A reusable skill for Claude Code and Codex that writes a full Markdown plan, turns it into dependency-aware Beads tasks, then implements and verifies the code in your project repository. Version 0.3.0 covers existing-project discovery, independent plan synthesis, optional swarm coordination, recovery, integrated review, delivery, and evidence-driven learning. It includes reusable templates and a read-only Python auditor.
+A reusable skill for Claude Code and Codex that writes a full Markdown plan, turns it into dependency-aware Beads tasks, then implements and verifies the code in your project repository. It supports existing-project discovery, independent plan synthesis, optional swarm coordination, recovery, integrated review, delivery, and evidence-driven learning, with reusable templates and a read-only Python auditor.
 
 The skill prefers Beads Rust (`br`) for new workspaces and preserves an existing original Beads (`bd`) backend. You can request the full workflow or stop at planning or Beads creation. GitHub publication follows your request; issue mirroring is optional.
 
@@ -167,7 +167,7 @@ The auditor prints a JSON receipt, with input hashes, errors, warnings, and cove
 
 It checks duplicate IDs, basic content, typed-edge integrity, missing local endpoints, structural cycles, and coverage references. Duplicate titles, external references, and custom edge types are flagged for review. Without a coverage map, coverage is explicitly `not_checked`.
 
-These checks do not prove semantic completeness, implementation, or backend-specific readiness. See the [coverage schema and audit limits](skills/github-beads/references/conversion-and-quality.md) and [validation results](docs/research-and-implementation-plan.md#validation-results-and-remaining-gates) for tested behavior and remaining integration gates.
+These checks do not prove semantic completeness, implementation, or backend-specific readiness. See the [coverage schema and audit limits](skills/github-beads/references/conversion-and-quality.md) for supported checks and their limits.
 
 Before claiming included work complete, add the optional status gate:
 
@@ -188,13 +188,11 @@ python skills/github-beads/scripts/audit_beads.py examples/sample-export.jsonl -
 
 GitHub Actions runs these checks on Windows and Linux. Keep the canonical package in `skills/github-beads`, preserve backend boundaries, and add a regression test when changing auditor behavior. Report the tracker version when proposing a command correction.
 
-## Research and attribution
+## Attribution
 
 The methodology was informed by Jeffrey Emanuel's [Agent Flywheel guide](https://agent-flywheel.com/complete-guide). The package is independently written and is not an official distribution of Agent Flywheel, Beads Rust, original Beads, or Beads Viewer.
 
-The [research and implementation plan](docs/research-and-implementation-plan.md) covers the design decisions and remaining live integration gates. Tool commands and behavior are checked against primary upstream documentation linked in the references.
-
-The [complete-guide coverage map](docs/complete-guide-coverage.md) accounts for the whole guide, all eight operators, prompt families, tools, and nine invariants. It identifies deliberate adaptations of fixed quotas, dated model advice, illustrated metrics, mandatory VPS/shared-main assumptions, and permission-bypass examples. The [detailed implementation TODO](plans/guide-complete-todo.md), [actual requirement coverage](plans/guide-complete-coverage.json), and [validation receipt](plans/guide-complete-receipt.md) show how this release was executed using real Beads.
+Primary upstream documentation is linked in the skill's references.
 
 ## License
 

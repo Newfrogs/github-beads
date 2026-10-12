@@ -2,3 +2,7 @@ __pycache__/
 *.py[cod]
 /.publish/
 /github-beads-skill.zip
+/.beads/
+/plans/
+/docs/research-and-implementation-plan.md
+/docs/complete-guide-coverage.md

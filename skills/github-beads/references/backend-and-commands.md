@@ -1,6 +1,6 @@
 # Backend selection and command handling
 
-Checked against primary upstream documentation on 12 October 2026. Verify the installed CLI before applying examples.
+Verify the installed CLI before applying examples.
 
 ## Choose one store
 
