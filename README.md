@@ -35,6 +35,23 @@ New-Item -ItemType Directory -Path (Split-Path $skillDestination) -Force | Out-N
 Copy-Item -LiteralPath '.\skills\github-beads' -Destination $skillDestination -Recurse
 ```
 
+## Install in Claude Code
+
+Run these commands in your terminal:
+
+```text
+claude plugin marketplace add Newfrogs/github-beads
+claude plugin install github-beads@github-beads --scope user
+```
+
+Start Claude Code in the repository you want to work on, then invoke:
+
+```text
+/github-beads:github-beads Convert plans/feature.md into Beads tasks with dependencies, acceptance criteria, verification, and a coverage audit.
+```
+
+The [Claude installation guide](docs/claude-installation.md) also covers Windows and macOS/Linux folder installation, personal and project scopes, verification, updates, and removal. A folder installation uses `/github-beads`; the plugin installation uses `/github-beads:github-beads`. See [Anthropic's plugin documentation](https://code.claude.com/docs/en/discover-plugins) for supported clients.
+
 ## Share within a repository
 
 Copy the same `skills/github-beads` folder into the target repository's `.agents/skills/github-beads` directory. Codex discovers repository skills there. GitHub Copilot also supports `.github/skills`, `.claude/skills`, and `.agents/skills`; see [GitHub's documentation](https://docs.github.com/en/copilot/concepts/agents/about-agent-skills) for supported clients.
@@ -53,6 +70,8 @@ Use `python3` instead of `python` in the commands below if that is how your syst
 Installing the skill does not install tracker binaries. Follow the [br](https://github.com/Dicklesworthstone/beads_rust#installation), [bd](https://github.com/gastownhall/beads), and optional [bv](https://github.com/Dicklesworthstone/beads_viewer#installation) instructions. Check the installed version's help before using command examples. Never run `br` and `bd` against the same store.
 
 ## Use the skill
+
+In Codex:
 
 ```text
 Use $github-beads to convert plans/feature.md into real Beads tasks in this

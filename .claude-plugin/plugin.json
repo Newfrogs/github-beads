@@ -1,0 +1,13 @@
+{
+  "name": "github-beads",
+  "version": "0.1.0",
+  "description": "Create, refine, and audit Beads tasks from repository plans and GitHub issues.",
+  "author": {
+    "name": "Newfrogs",
+    "url": "https://github.com/Newfrogs"
+  },
+  "homepage": "https://github.com/Newfrogs/github-beads/blob/main/docs/claude-installation.md",
+  "repository": "https://github.com/Newfrogs/github-beads",
+  "license": "MIT",
+  "keywords": ["beads", "github", "planning", "tasks"]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "github-beads",
+  "description": "Claude Code installation for the reusable GitHub Beads skill.",
+  "owner": {
+    "name": "Newfrogs"
+  },
+  "plugins": [
+    {
+      "name": "github-beads",
+      "source": "./",
+      "description": "Create, refine, and audit dependency-aware Beads tasks in GitHub repositories."
+    }
+  ]
+}
