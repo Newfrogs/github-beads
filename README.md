@@ -1,6 +1,6 @@
 # GitHub Beads
 
-A reusable skill for Claude Code and Codex that writes a full Markdown plan, turns it into dependency-aware Beads tasks, then implements and verifies the code in your project repository. It includes a plan template, execution and resume guidance, and a Python auditor for dependency and requirement-mapping checks.
+A reusable skill for Claude Code and Codex that writes a full Markdown plan, turns it into dependency-aware Beads tasks, then implements and verifies the code in your project repository. Version 0.3.0 covers existing-project discovery, independent plan synthesis, optional swarm coordination, recovery, integrated review, delivery, and evidence-driven learning. It includes reusable templates and a read-only Python auditor.
 
 The skill prefers Beads Rust (`br`) for new workspaces and preserves an existing original Beads (`bd`) backend. You can request the full workflow or stop at planning or Beads creation. GitHub publication follows your request; issue mirroring is optional.
 
@@ -145,6 +145,10 @@ The [plan template](skills/github-beads/assets/plan-template.md) covers the goal
 
 The agent checks for existing tasks before creating records, audits source coverage and dependencies, claims eligible work through the native tracker, implements it, and records acceptance evidence before closing tasks. The [implementation and resume guide](skills/github-beads/references/implementation-and-resume.md) describes that loop and recovery after interruptions.
 
+For an existing project, the [discovery guide](skills/github-beads/references/existing-projects.md) traces real user paths and checks for completed code that needs connecting. Substantial plans can use independent proposals and selective synthesis without a fixed provider roster or review quota. The [coordination guide](skills/github-beads/references/swarm-coordination.md) separates task claims, file reservations, messages, and Git integration, and diagnoses stalled work. The [toolchain and learning guide](skills/github-beads/references/toolchain-and-learning.md) inventories all 28 guide modules and routes optional tools by actual need, capacity, and data scope.
+
+The [workflow request packets](skills/github-beads/assets/workflow-prompts.md), [project instructions template](skills/github-beads/assets/agent-instructions-template.md), and [feedback template](skills/github-beads/assets/agent-feedback-template.md) support synthesis, transfer audits, recovery, review, and tested lesson capture. Adapt them to the repository; installing the skill does not overwrite project instructions, install the tool stack, or change host permissions.
+
 A full workflow request continues through the local stages without another planning approval. Material missing decisions and host permissions still apply; independent work continues when possible. Commits, pushes, PRs, deployment, and issue publication follow your request. A passing structural audit alone does not establish that code is implemented or correct.
 
 ## Run the auditor on its own
@@ -165,6 +169,14 @@ It checks duplicate IDs, basic content, typed-edge integrity, missing local endp
 
 These checks do not prove semantic completeness, implementation, or backend-specific readiness. See the [coverage schema and audit limits](skills/github-beads/references/conversion-and-quality.md) and [validation results](docs/research-and-implementation-plan.md#validation-results-and-remaining-gates) for tested behavior and remaining integration gates.
 
+Before claiming included work complete, add the optional status gate:
+
+```bash
+python skills/github-beads/scripts/audit_beads.py .beads/issues.jsonl --coverage plans/feature-coverage.json --require-closed
+```
+
+It requires a coverage map and rejects included records that are not closed. Deferred/excluded scope and unrelated backlog need not close. Its `completion` receipt counts unique included and closed records; status alone still needs actual acceptance and integration evidence. The default audit remains suitable for a newly created unfinished backlog.
+
 ## Contribute
 
 Run the tests and example before proposing changes:
@@ -181,6 +193,8 @@ GitHub Actions runs these checks on Windows and Linux. Keep the canonical packag
 The methodology was informed by Jeffrey Emanuel's [Agent Flywheel guide](https://agent-flywheel.com/complete-guide). The package is independently written and is not an official distribution of Agent Flywheel, Beads Rust, original Beads, or Beads Viewer.
 
 The [research and implementation plan](docs/research-and-implementation-plan.md) covers the design decisions and remaining live integration gates. Tool commands and behavior are checked against primary upstream documentation linked in the references.
+
+The [complete-guide coverage map](docs/complete-guide-coverage.md) accounts for the whole guide, all eight operators, prompt families, tools, and nine invariants. It identifies deliberate adaptations of fixed quotas, dated model advice, illustrated metrics, mandatory VPS/shared-main assumptions, and permission-bypass examples. The [detailed implementation TODO](plans/guide-complete-todo.md), [actual requirement coverage](plans/guide-complete-coverage.json), and [validation receipt](plans/guide-complete-receipt.md) show how this release was executed using real Beads.
 
 ## License
 

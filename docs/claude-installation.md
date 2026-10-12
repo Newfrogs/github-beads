@@ -92,6 +92,8 @@ python skills/github-beads/scripts/audit_beads.py examples/sample-export.jsonl -
 
 Use `python3` if that is your Python 3 command. The synthetic example should produce `"ok": true` and exit successfully. The [validation report](research-and-implementation-plan.md#validation-results-and-remaining-gates) distinguishes the automated checks, workflow pilot, and remaining integration gates.
 
+Version 0.3.0 adds existing-project discovery, plan synthesis, optional swarm coordination, recovery, integrated review, and tested lesson capture using the same canonical package as Codex. See the [whole-guide coverage](complete-guide-coverage.md) and [current execution receipt](../plans/guide-complete-receipt.md). For final included-work status checks, the auditor also accepts `--require-closed` with your actual coverage map; closed status still needs acceptance evidence.
+
 ## Update or remove
 
 To refresh a plugin installation:

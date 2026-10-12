@@ -10,6 +10,10 @@ Describe the requested result, who or what uses it, current behavior, and how su
 
 **Excluded or deferred:** State relevant exclusions and the reason for any deferred scope.
 
+## User workflows
+
+Describe the important journeys from the user's or operator's perspective: trigger, inputs, success result, progress or intermediate states, permission boundary, visible failure, and recovery. Keep only meaningful workflows. Use them to discover missing requirements rather than assuming component names fully describe the product.
+
 ## Inputs, evidence, and current system
 
 | Source | Finding or constraint | Confidence / open question |
@@ -17,6 +21,8 @@ Describe the requested result, who or what uses it, current behavior, and how su
 | Repository path and symbol, supplied issue or specification, or authoritative URL | Relevant observed fact; label assumptions explicitly | Verified against a revision/version, or still to investigate |
 
 Describe the current architecture and data flow relevant to this change: entry points, components, interfaces, persistence, tests, and existing conventions. Use repository-relative paths. Mark suggested new paths as proposed. Cite external technical evidence only when it informs a decision, including its applicable version or access date.
+
+Identify the applicable project instructions, established or selected stack, and relevant local engineering guidance. Explain an undecided or changed stack using the workflows and concrete capabilities it must support; do not copy another project's configuration by default.
 
 ## Requirements and acceptance criteria
 
@@ -56,6 +62,8 @@ Describe expected error behavior, important edge cases, and the relevant authori
 
 Describe cross-component or end-to-end checks where they add evidence beyond individual slices. Record existing baseline failures or unavailable checks without claiming they passed. Concrete execution results will be attached to the corresponding Beads.
 
+Specify setup and diagnostic evidence needed to understand meaningful failures, respecting the project's privacy and logging rules.
+
 ## Risks and unresolved decisions
 
 | Question or risk | Impact on the outcome | Evidence needed / mitigation | Dependent scope |
@@ -69,3 +77,13 @@ Describe cross-component or end-to-end checks where they add evidence beyond ind
 | Initial approach or meaningful later change | Repository evidence, user direction, or cited documentation | Affected requirement IDs, interfaces, or verification |
 
 Record the source revision or specification version when useful. During execution, revise this plan only when intent, design, or verification changes; reconcile the affected Beads and requirement coverage at the same time.
+
+<!-- Optional: keep the following table when synthesizing alternatives or applying substantial review feedback. Remove it for a straightforward plan with no such inputs. -->
+
+### Review feedback disposition
+
+| Proposal or finding | Accepted / adapted / rejected / deferred | Reason and revised requirement or section |
+| --- | --- | --- |
+| Concrete idea from an independent proposal or review | Explicit disposition | Evidence, tradeoff, and where an accepted change is integrated |
+
+Before conversion, confirm that the included design is actionable and remaining work concerns executable task boundaries and verification. For a full-pipeline request, the next stage is actual tracker creation and reconciliation; the plan and this table do not substitute for Beads.

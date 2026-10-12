@@ -38,6 +38,7 @@ Representative command forms:
 ```text
 br init
 br create "Implement the parser contract" --type task --priority 2 --description "Source: PLAN.md#REQ-PARSE-01; preserve the documented input rules." --json
+br create "Implement the parser contract" --type task --priority 2 --description-file bead-body.md --json
 br show ACTUAL_ID --json
 br update ACTUAL_ID --description-file bead-body.md --json
 br create "Parser delivery" --type epic --priority 2 --description "Scope and completion contract for parser delivery." --json
@@ -50,7 +51,7 @@ br blocked --json
 br sync --flush-only
 ```
 
-Substitute IDs returned by the tracker. The positional title avoids relying on the guide's `--title` example. `create --file` means bulk creation from a specially parsed Markdown file, not reading one bead description. Current `update --description-file` replaces the entire description verbatim; re-read the bead and preserve existing content before using it. Check help before relying on this flag in older versions. [CLI reference](https://github.com/Dicklesworthstone/beads_rust/blob/main/docs/CLI_REFERENCE.md), [CLI implementation](https://github.com/Dicklesworthstone/beads_rust/blob/main/src/cli/mod.rs).
+Substitute IDs returned by the tracker. The positional title avoids relying on the guide's `--title` example. `create --file` means bulk creation from a specially parsed Markdown file, not reading one bead description. Version 0.7.4 supports `create --description-file` for a complete literal body in one mutation. Current `update --description-file` replaces the entire description verbatim; re-read the bead and preserve existing content before using it. Check help before relying on these flags in older versions. [CLI reference](https://github.com/Dicklesworthstone/beads_rust/blob/main/docs/CLI_REFERENCE.md), [CLI implementation](https://github.com/Dicklesworthstone/beads_rust/blob/main/src/cli/mod.rs).
 
 For long bodies, prefer a supported file input or a subprocess API argument array; keep newlines, quotes, backticks, Unicode, and dollar signs literal. If no file option exists, use an argument array with shell interpretation disabled. Do not build shell code from plan text. Verify the saved body with `show` after creation or update. A two-step create and body update must leave an explicit unfinished record if the second step fails.
 

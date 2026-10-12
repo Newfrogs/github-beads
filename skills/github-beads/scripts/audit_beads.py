@@ -56,7 +56,7 @@ def cycle_components(graph):
     return sorted(components)
 
 
-def audit(rows, coverage=None):
+def audit(rows, coverage=None, *, require_closed=False):
     errors, warnings = [], []
 
     def error(code, **details):
@@ -146,6 +146,13 @@ def audit(rows, coverage=None):
         warn("external_dependencies_not_verified", edges=external)
 
     coverage_summary = {"state": "not_checked"}
+    completion_summary = {"state": "not_checked"}
+    if require_closed:
+        completion_summary = {"state": "included_status_checked", "included_beads": 0, "closed_beads": 0}
+        if coverage is None:
+            error("completion_requires_coverage")
+            completion_summary["state"] = "unavailable"
+    included_ids = set()
     if coverage is not None:
         requirements = coverage.get("requirements") if isinstance(coverage, dict) else None
         if not isinstance(requirements, list) or not requirements:
@@ -184,7 +191,15 @@ def audit(rows, coverage=None):
                     error("missing_coverage_bead", requirement=req_id, id=node)
                 elif records[node].get("status") == "tombstone":
                     error("tombstone_coverage", requirement=req_id, id=node)
+                if require_closed and disposition == "included":
+                    included_ids.add(node)
+                    if node in records and records[node].get("status") != "closed":
+                        error("included_bead_not_closed", requirement=req_id, id=node, status=records[node].get("status"))
         coverage_summary = {"state": "mapping_checked", "requirements": len(requirements), **counts}
+
+    if require_closed and coverage is not None:
+        completion_summary["included_beads"] = len(included_ids)
+        completion_summary["closed_beads"] = sum(records.get(node, {}).get("status") == "closed" for node in included_ids)
 
     if not records:
         warn("empty_export")
@@ -193,9 +208,10 @@ def audit(rows, coverage=None):
         "ok": not errors,
         "summary": {"issues": len(records), "typed_edges": edge_count, "cycle_components": len(cycles)},
         "coverage": coverage_summary,
+        "completion": completion_summary,
         "errors": errors,
         "warnings": warnings,
-        "limits": "Structural and mapping checks only; requirement completeness, semantic quality, readiness policy, and external dependencies need separate review.",
+        "limits": "Structural, mapping, and optional included-status checks only; requirement completeness, semantic quality, implementation acceptance evidence, readiness policy, and external dependencies need separate review.",
     }
 
 
@@ -216,6 +232,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("export", type=Path, help="Full Beads issue-object-per-line JSONL export")
     parser.add_argument("--coverage", type=Path, help="Requirement coverage map JSON")
+    parser.add_argument("--require-closed", action="store_true", help="Reject included coverage beads that are not closed; requires --coverage. Status is not proof of acceptance.")
     args = parser.parse_args()
     try:
         rows, export_hash = load_jsonl(args.export)
@@ -224,7 +241,7 @@ def main():
             data = args.coverage.read_bytes()
             coverage = json.loads(data.decode("utf-8-sig"))
             coverage_hash = hashlib.sha256(data).hexdigest()
-        result = audit(rows, coverage)
+        result = audit(rows, coverage, require_closed=args.require_closed)
         result["inputs"] = {"export_sha256": export_hash, "coverage_sha256": coverage_hash}
     except (OSError, UnicodeError, ValueError) as exc:
         print(json.dumps({"schema_version": 1, "ok": False, "errors": [{"code": "input_error", "message": str(exc)}]}))

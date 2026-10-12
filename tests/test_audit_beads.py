@@ -78,6 +78,64 @@ class AuditTests(unittest.TestCase):
         self.assertEqual(MODULE.audit([issue("a")])["coverage"]["state"], "not_checked")
         self.assertFalse(MODULE.audit([issue("a")], {"requirements": []})["ok"])
 
+    def test_completion_gate_is_opt_in_and_needs_coverage(self):
+        self.assertTrue(MODULE.audit([issue("a")])["ok"])
+        self.assertEqual(MODULE.audit([issue("a")])["completion"]["state"], "not_checked")
+        result = MODULE.audit([issue("a")], require_closed=True)
+        self.assertFalse(result["ok"])
+        self.assertIn("completion_requires_coverage", self.codes(result))
+        self.assertEqual(result["completion"]["state"], "unavailable")
+
+    def test_completion_rejects_open_in_progress_and_custom_status(self):
+        for status in ("open", "in_progress", "deferred", "awaiting-review"):
+            with self.subTest(status=status):
+                manifest = {"requirements": [{"id": "R1", "disposition": "included", "bead_ids": ["a"]}]}
+                result = MODULE.audit([issue("a", status=status)], manifest, require_closed=True)
+                self.assertEqual(self.codes(result), {"included_bead_not_closed"})
+                self.assertEqual(result["errors"][0]["status"], status)
+                self.assertEqual(result["completion"]["closed_beads"], 0)
+
+    def test_completion_allows_deferred_excluded_and_unmapped_backlog(self):
+        manifest = {"requirements": [
+            {"id": "R1", "disposition": "included", "bead_ids": ["a"]},
+            {"id": "R2", "disposition": "deferred", "bead_ids": ["b"], "reason": "Approved for later delivery"},
+            {"id": "R3", "disposition": "out_of_scope", "bead_ids": [], "reason": "User excluded it"},
+        ]}
+        result = MODULE.audit([issue("a", status="closed"), issue("b", status="deferred"), issue("unrelated")], manifest, require_closed=True)
+        self.assertTrue(result["ok"], result)
+        self.assertEqual(result["completion"], {"state": "included_status_checked", "included_beads": 1, "closed_beads": 1})
+
+    def test_completion_shared_bead_count_and_invalid_coverage(self):
+        manifest = {"requirements": [{"id": key, "disposition": "included", "bead_ids": ["a"]} for key in ("R1", "R2")]}
+        result = MODULE.audit([issue("a", status="closed")], manifest, require_closed=True)
+        self.assertTrue(result["ok"])
+        self.assertEqual(result["completion"]["included_beads"], 1)
+        result = MODULE.audit([issue("a", status="closed")], {"requirements": []}, require_closed=True)
+        self.assertFalse(result["ok"])
+        self.assertIn("invalid_coverage_manifest", self.codes(result))
+
+    def test_completion_missing_and_tombstone_records_never_pass(self):
+        manifest = {"requirements": [{"id": "R1", "disposition": "included", "bead_ids": ["missing", "deleted"]}]}
+        result = MODULE.audit([issue("deleted", status="tombstone")], manifest, require_closed=True)
+        self.assertFalse(result["ok"])
+        self.assertTrue({"missing_coverage_bead", "tombstone_coverage", "included_bead_not_closed"}.issubset(self.codes(result)))
+
+    def test_completion_cli_rejects_unfinished_scope_without_changing_input(self):
+        with tempfile.TemporaryDirectory(dir=Path(__file__).resolve().parent) as directory:
+            export = Path(directory) / "issues.jsonl"
+            coverage = Path(directory) / "coverage.json"
+            export.write_text(json.dumps(issue("a")) + "\n", encoding="utf-8")
+            coverage.write_text(json.dumps({"requirements": [{"id": "R1", "disposition": "included", "bead_ids": ["a"]}]}), encoding="utf-8")
+            before = (export.read_bytes(), coverage.read_bytes())
+            result = subprocess.run([sys.executable, str(SCRIPT), str(export), "--coverage", str(coverage), "--require-closed"], capture_output=True, text=True)
+            self.assertEqual(result.returncode, 1, result.stderr)
+            self.assertEqual(json.loads(result.stdout)["errors"][0]["code"], "included_bead_not_closed")
+            self.assertEqual((export.read_bytes(), coverage.read_bytes()), before)
+            export.write_text(json.dumps(issue("a", status="closed")) + "\n", encoding="utf-8")
+            result = subprocess.run([sys.executable, str(SCRIPT), str(export), "--coverage", str(coverage), "--require-closed"], capture_output=True, text=True)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual(json.loads(result.stdout)["completion"]["closed_beads"], 1)
+
     def test_duplicate_requirement_and_title_review(self):
         a, b = issue("a"), issue("b")
         a["title"], b["title"] = "  Same TITLE  ", "same title"

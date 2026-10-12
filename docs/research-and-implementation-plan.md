@@ -212,7 +212,7 @@ Acceptance: changes have an identifiable behavior benefit and existing invariant
 
 ## Validation results and remaining gates
 
-The package passes the bundled skill validator. All 15 automated auditor tests pass. They cover valid DAGs, duplicate IDs, missing endpoints, exact cycle components, blocking categories, nonblocking relationships, closed cycles, typed-edge identity, external and custom references, coverage gaps, tombstones, missing manifests, malformed fields, Unicode, CLI exit codes, and preservation of input bytes. A 3,000-record chain exercises deep traversal.
+The package passes the bundled skill validator. All 21 automated auditor tests pass. They cover valid DAGs, duplicate IDs, missing endpoints, exact cycle components, blocking categories, nonblocking relationships, closed cycles, typed-edge identity, external and custom references, coverage gaps, tombstones, missing manifests, malformed fields, Unicode, CLI exit codes, preservation of input bytes, and the optional included-work completion gate. A 3,000-record chain exercises deep traversal.
 
 The version 0.2 workflow was also exercised in disposable projects:
 
@@ -224,6 +224,8 @@ The version 0.2 workflow was also exercised in disposable projects:
 The Windows pilot encountered a path-resolution failure in the restricted environment before initialization; no database override variables were set. An explicit pilot-local database path and normal permission escalation kept subsequent operations in the disposable repository. The backend guidance now requires confirming the resolved database and export before mutation. This does not establish an upstream root cause for that initial failure.
 
 These checks validate the helper, package, planning scope, and one real `br` planning-to-code workflow. They do not exercise live `bd` or `bv`, GitHub issue mirroring, concurrent claim races, deployment, or complete model-driven sessions in both external clients. Client discovery and installation are separate packaging checks. The broader pilots and actual backlog review gates remain as listed above. The public repository includes runnable auditor examples and GitHub Actions checks on Windows and Linux.
+
+Version 0.3.0 extends the package after inspecting the whole complete guide, including its final operators, learning loop, prompt families, tool modules and deployment advice. The [complete coverage map](complete-guide-coverage.md) accounts for every substantive practice and explicit adaptation. The package now has sixteen canonical files and an optional `--require-closed` audit gate with six additional regression tests. The [current plan](../plans/guide-complete-skill.md), [granular TODO](../plans/guide-complete-todo.md), [actual Beads mapping](../plans/guide-complete-coverage.json), and [execution receipt](../plans/guide-complete-receipt.md) record this release's implementation, live resume probe, publication, client installation checks, and remaining optional-integration limits.
 
 ## Principal decisions and risks
 
