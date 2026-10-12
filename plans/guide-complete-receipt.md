@@ -44,4 +44,12 @@ The deterministic helper tests and native br operations do not exercise every op
 
 ## Final behavior and publication evidence
 
-Pending execution. Actual records remain open until their acceptance evidence is recorded and their native closure succeeds.
+The independent duration resume probe completed the unfinished CLI using the existing library and original two Beads. All eight project tests passed, and both original records closed with acceptance evidence. Original library and test hashes remained unchanged. The real CLI and failure paths were exercised rather than mocked.
+
+All seven actual work records in this repository are closed after their evidence comments. Native ready and blocked sets are empty and active cycle count is zero. The [final read-only audit](guide-complete-audit.json) passes nine included requirements mapped to seven unique closed records, with six edges, no errors and no warnings. Its hashes describe the locally inspected input bytes; normal Git newline conversion can change hashes on another checkout without changing semantics.
+
+Version 0.3.0 was published in [feature commit 17b329a](https://github.com/Newfrogs/github-beads/commit/17b329a9d5003ba966c9cf3fddd816a0bb6dc52b). Its [GitHub Actions run](https://github.com/Newfrogs/github-beads/actions/runs/38305688686) completed successfully. CI covers Python 3.10/3.12 on Windows/Linux, auditor tests, the synthetic example, and this repository's actual collaboration export/requirement mapping.
+
+The existing Codex installation was updated after checking and backing up its unchanged 0.2 package; all sixteen installed files match source bytes. Native Claude updated the enabled user plugin from 0.2.0 to 0.3.0; all sixteen skill files match after ordinary Git newline normalization. A new session/restart loads the update. The package's content is shared by both clients; complete external-client model sessions remain outside the claims above.
+
+The final follow-up publishes the closed collaboration state, completed checklist, and final audit receipt. Runtime state, private captures, downloaded tools, and pilots remain ignored.

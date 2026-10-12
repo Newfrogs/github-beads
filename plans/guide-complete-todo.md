@@ -94,15 +94,15 @@ Native Beads is the status authority. This detailed checklist is the implementat
 
 ## Publication and installations — ghb-l35
 
-- [ ] Bump the Claude package to 0.3.0 and update public usage/contribution/validation documentation.
-- [ ] Verify the tracker export and metadata contain no machine-specific paths or secrets before staging.
-- [ ] Keep databases, locks, recovery logs, downloaded guide, tools, and pilots ignored.
+- [x] Bump the Claude package to 0.3.0 and update public usage/contribution/validation documentation.
+- [x] Verify the tracker export and metadata contain no machine-specific paths or secrets before staging.
+- [x] Keep databases, locks, recovery logs, downloaded guide, tools, and pilots ignored.
 - [x] Correct generated ignore rules for observed native `*.db-lock-*` sidecars and verify them with Git.
-- [ ] Inspect the exact staged diff and preserve unrelated files.
-- [ ] Commit and push the authorized skill update to the verified existing repository.
-- [ ] Update the existing Codex installation with local edits preserved and content checked.
-- [ ] Update the native Claude plugin and verify its version, enabled state, and canonical skill contents.
-- [ ] Verify the published revision and its GitHub Actions result.
-- [ ] Record actual publication/install evidence, close the actual publication bead, and export final state.
-- [ ] Publish the final closed tracker/checklist receipt and verify the final remote revision/CI.
-- [ ] Report delivered paths, capabilities, checks, and material untested optional integrations.
+- [x] Inspect the exact staged diff and preserve unrelated files.
+- [x] Commit and push the authorized skill update to the verified existing repository.
+- [x] Update the existing Codex installation with local edits preserved and content checked.
+- [x] Update the native Claude plugin and verify its version, enabled state, and canonical skill contents.
+- [x] Verify the published revision and its GitHub Actions result.
+- [x] Record actual publication/install evidence, close the actual publication bead, and export final state.
+- [x] Publish the final closed tracker/checklist receipt and verify the final remote revision/CI.
+- [x] Report delivered paths, capabilities, checks, and material untested optional integrations.
